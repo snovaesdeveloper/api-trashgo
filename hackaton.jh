@@ -1,0 +1,78 @@
+enum PerfilUsuario {
+    CLIENTE,
+    COOPERATIVA,
+    ADMINISTRADOR
+}
+
+entity Usuario {
+    nome String
+    perfil PerfilUsuario
+    login String
+    senha String
+}
+
+relationship OneToOne {
+    Usuario{user} to User
+}
+
+entity Endereco {
+    cep String
+    uf String
+    cidade String
+    bairro String
+    logradouro String
+    numero String
+    complemento String
+    latitude Double
+    longitude Double
+}
+
+enum TipoLocal {
+    CONDOMINIO,
+    RESIDENCIA,
+    EMPRESA
+}
+
+entity Local {
+    // Endereço
+    nome String
+    tipo TipoLocal
+}
+
+relationship OneToOne {
+    Local to Endereco
+}
+
+entity Cooperativa {
+    nome String
+}
+
+relationship ManyToOne {
+    Cooperativa to Usuario
+    Local to Usuario
+}
+
+enum StatusColeta{
+    PENDENTE, ATRASADA, ATENDIDA
+}
+
+entity Coleta {
+    data LocalDate
+    pontosColeta Integer
+    status StatusColeta
+}
+
+relationship ManyToOne {
+    Coleta to Cooperativa
+}
+
+entity RelacaoLocalColeta{}
+
+relationship ManyToOne{
+    RelacaoLocalColeta to Local
+    RelacaoLocalColeta to Coleta{pontosColeta}
+}
+
+paginate * with pagination
+service all with serviceImpl
+filter *
